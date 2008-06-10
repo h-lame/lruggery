@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/boot'
+if 'tomcat' == ARGV.first
+  OPTIONS = {
+    :tomcat_home => nil, #tomcat.rb will do the default automagically
+    :environment => (ENV['RAILS_ENV'] || "development").dup
+  }
+  ARGV.shift
+  
+  require 'optparse'
+
+  ARGV.options do |opts|
+    script_name = File.basename($0)
+    opts.banner = "Usage: ruby #{script_name} [options]"
+    opts.separator ""  
+    opts.on("-t", "--tomcat_home=dir", String,
+          "Specifies the tomcat home directory.",
+          "Default: RAILS_ROOT/vendor/tomcat-5.5.17)") {|v| OPTIONS[:tomcat_home] = v}
+    opts.on("-e", "--environment=name", String,
+          "Specifies the environment to run this server under (test/development/production).",
+          "Default: development") { |v| OPTIONS[:environment] = v }
+    opts.parse!
+  end
+  ENV["RAILS_ENV"] = OPTIONS[:environment]
+  RAILS_ENV.replace(OPTIONS[:environment]) if defined?(RAILS_ENV)
+
+  require RAILS_ROOT + "/config/environment"
+  require 'tomcat'
+  puts "=> Booting Tomcat (you silly person)..."
+  TomcatServer.create(OPTIONS).start_up_server
+  # Gotta do something to keep the main thread alive...
+  loop {  }
+else
+  require 'commands/server'
+end
