@@ -1,0 +1,77 @@
+Intro
+=====
+
+In my role as organiser for the London Ruby User 
+Group (LRUG) I occasionally write little ruby 
+scripts to do stuff.  Mostly these scripts are
+an excuse to learn something new, like Shoes
+or Hpricot.  However, I tend not to spend an
+awful lot of time looking into stuff properly
+and so these scripts are not exactly what I
+would call my best work.  They tend to do
+exactly the bare minimum in the most hacky
+way possible (I'm all about form over function).
+
+Still, sharing stuff is the new hawtness, and thus.
+
+Gaze ye, upon my works and weep...
+
+names from a hat
+----------------
+
+Sometimes we've needed to choose a name from a 
+random list.  For giving out things where more 
+people than things were to be given out.  Or
+perhaps for choosing speakers randomly.  The
+scripts in here are variations on that theme.
+
+### haphazard / haphazard2
+Shoes apps for showing a list of names and then
+randomly choosing one.  We used this to determine
+the order of speakers at a Lightning talk meeting
+we held in [February 2008][1].
+
+#### haphazard vs. haphazard2
+ * *haphazard* works for a small list of names.
+ * *haphazard2* works for a large list of names.
+ 
+### hat
+Another Shoes app that we used to determine who
+to give out some free copies of books to.  It
+takes a list of names, drops them into a rendered
+hat and then does some magic to choose a name from
+those in the hat.
+
+rails cities
+------------
+Hpricot scripts to scrape the [Working With Rails][2]
+site and then determine which London-based rails 
+programmers to vote for to make London appear higher 
+in the rankings on [Rails Cities][3].
+
+Comes in two parts; one to scrape the site and one
+two use the results of that to determine possible
+candidates.
+
+script/server tomcat
+--------------------
+As part of a talk I gave about integrating ruby and
+java, I wrote a version of the rails script/server
+that would invoke tomcat as the server.  The files
+in this folder are intended to be dropped into a 
+rails 1.1.x application.  You then need to put
+tomcat 5.5.17 into the vendor/tomcat-5.5.17 directory
+and also a copy of [yajb][4] into the vendor/yajb.
+
+Once you've done this typing script/server tomcat
+would give you a freakishly slow version of rails
+that runs via tomcat.
+
+I'd just [JRuby][5] if I was you though.
+
+
+[1]: http://lrug.org/meetings/2008/01/25/february-2008-meeting/
+[2]: http://www.workingwithrails.com/
+[3]: http://www.railscities.com/
+[4]: http://www.cmt.phys.kyushu-u.ac.jp/~M.Sakurai/cgi-bin/fw/wiki.cgi?page=YAJB
+[5]: http://jruby.codehaus.org/
