@@ -42,6 +42,11 @@ takes a list of names, drops them into a rendered
 hat and then does some magic to choose a name from
 those in the hat.
 
+### Shoes Versions
+The first 2 were written against Shoes Curious,
+whereas the third one was written against Shoes.r532.
+It might make a difference.
+
 rails cities
 ------------
 Hpricot scripts to scrape the [Working With Rails][2]
