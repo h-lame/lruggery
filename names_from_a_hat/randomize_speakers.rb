@@ -11,8 +11,11 @@ random_choice = Fiber.new do |speakers|
   end
 end
 
+# Paul wants to use his own laptop, so we'll put him first or last and take him out of the random choice.
+# our_brave_volunteers = ['Paul Ardeleanu', 'Ismael Celis', 'Joel Chippindale', 'Lars Jorgensen', 'Alex MacCaw', 'Anup Narkhede', 'Thomas Pomfret', 'Brent Snook', 'Murray Steele']
+our_brave_volunteers = ['Ismael Celis', 'Joel Chippindale', 'Lars Jorgensen', 'Alex MacCaw', 'Anup Narkhede', 'Thomas Pomfret', 'Brent Snook', 'Murray Steele']
 
-random_choice.resume ['Paul Ardeleanu', 'Ismael Celis', 'Joel Chippindale', 'Lars Jorgensen', 'Alex MacCaw', 'Anup Narkhede', 'Thomas Pomfret', 'Brent Snook', 'Murray Steele']
+random_choice.resume our_brave_volunteers
 while random_choice.alive? do
   STDIN.gets
   speaker = random_choice.resume
