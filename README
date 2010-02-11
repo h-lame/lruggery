@@ -47,6 +47,15 @@ The first 2 were written against Shoes Curious,
 whereas the third one was written against Shoes.r532.
 It might make a difference.
 
+### randomize_speakers
+Simple app using Fibers and osascript to randomly
+choose the order of speakers for our February 2010[6]
+meeting.  I was doing a talk on Fibers for that meeting
+so it seemed appropriate to use them (not that I told
+anyone or referred to it in my talk).
+
+Wants ruby 1.9 and a mac.
+
 rails cities
 ------------
 Hpricot scripts to scrape the [Working With Rails][2]
@@ -80,3 +89,4 @@ I'd just [JRuby][5] if I was you though.
 [3]: http://www.railscities.com/
 [4]: http://www.cmt.phys.kyushu-u.ac.jp/~M.Sakurai/cgi-bin/fw/wiki.cgi?page=YAJB
 [5]: http://jruby.codehaus.org/
+[6]: http://lrug.org/meetings/2010/01/21/february-2010-meeting/
