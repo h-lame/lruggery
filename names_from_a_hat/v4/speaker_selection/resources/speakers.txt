@@ -1,0 +1,8 @@
+@beng:Ben Griffiths:BASIC Interpreter
+@gerhardlazu:Gerhard Lazu:How do we suck in 480 books per second from Amazon's API using Ruby via Redis into MongoDB
+@neilmiddleton:Neil Middleton:Riding Rails through a TV induced storm
+@chrislowis:Chris Lowis:W3C Audio XG Group (audio + javascript)
+@misteredavey:Ed Davey:Ruby search systems
+@lazyatom:James Adam:An exploration of why nobody needs to write any more test frameworks
+@jimeh:Jim Myhrberg:Redistat
+@tomstuart:Tom Stuart:ARel
