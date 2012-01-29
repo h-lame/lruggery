@@ -1,0 +1,6 @@
+require './lib/rogue/space'
+require './lib/rogue/world'
+require './lib/rogue/room'
+require './lib/rogue/tileset'
+require './lib/rogue/renderer'
+require './lib/rogue/generator'
