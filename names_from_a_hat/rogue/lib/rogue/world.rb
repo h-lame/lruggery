@@ -15,7 +15,7 @@ module Rogue
           direction = possible_directions(desired_width, desired_height).sample
           send(:"split_#{direction}ly", desired_width, desired_height) if direction
         else
-          children.any? { |c| c.split!(desired_width, desired_height) }
+          children.map { |c| c.split!(desired_width, desired_height) }.compact.any?
         end
       end
     end
@@ -37,7 +37,7 @@ module Rogue
     end
 
     def split_horizontally(desired_width, desired_height)
-      pos = ((0+desired_height)..(height-desired_height)).to_a.sample
+      pos = Spreader.new(((0+desired_height)..(height-desired_height)).to_a).get_weighted_random_item
       @children =
         if pos
           [
@@ -50,7 +50,7 @@ module Rogue
     end
   
     def split_vertically(desired_width, desired_height)
-      pos = ((0+desired_width)..(width-desired_width)).to_a.sample
+      pos = Spreader.new(((0+desired_width)..(width-desired_width)).to_a).get_weighted_random_item
       @children =
         if pos
           [
