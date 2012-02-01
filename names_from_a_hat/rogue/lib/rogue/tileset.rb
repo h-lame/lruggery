@@ -5,10 +5,11 @@ module Rogue
   class TileSet
     Tiles = {
       empty: ' ',
+      floor: '.'.white,
       room: {
         corner: '+'.red,
         horizontal_wall: '-'.red,
-        vertical_wall: '|'.red
+        vertical_wall: '|'.red,
       },
       world: {
         corner: '+'.green,
@@ -26,44 +27,50 @@ module Rogue
       height.times { @tiles << ([TileSet::Tiles[:empty]] * width) }
     end
 
-    def draw_room_horizontal_wall(x,y)
-      draw_horizontal_wall(x,y, :room)
+    def draw_room(room)
+      top_left, top_right, bottom_left, bottom_right = *room.boundaries
+      draw_corner(*top_left, :room)
+      draw_corner(*top_right, :room)
+      draw_corner(*bottom_left, :room)
+      draw_corner(*bottom_right, :room)
+
+      draw_vertical_wall_between(*room.wall(:east), :room)
+      draw_vertical_wall_between(*room.wall(:west), :room)
+
+      draw_horizontal_wall_between(*room.wall(:north), :room)
+      draw_horizontal_wall_between(*room.wall(:south), :room)
+
+      ((top_left.first + 1)..(top_right.first - 1)).each do |floor_x|
+        ((top_left.last + 1)..(bottom_left.last - 1)).each do |floor_y|
+          draw_floor(floor_x, floor_y)
+        end
+      end
     end
 
-    def draw_room_vertical_wall(x,y)
-      draw_vertical_wall(x,y, :room)
+    def draw_world(world)
+      top_left, top_right, bottom_left, bottom_right = *world.boundaries
+
+      draw_corner(*top_left, :world)
+      draw_corner(*top_right, :world)
+      draw_corner(*bottom_left, :world)
+      draw_corner(*bottom_right, :world)
+
+      draw_vertical_wall_between(*world.wall(:west), :world)
+      draw_vertical_wall_between(*world.wall(:east), :world)
+
+      draw_horizontal_wall_between(*world.wall(:north), :world)
+      draw_horizontal_wall_between(*world.wall(:south), :world)
     end
 
-    def draw_room_horizontal_wall_between(top, bottom)
-      draw_horizontal_wall_between(top, bottom, :room)
-    end
-
-    def draw_room_vertical_wall_between(left, right)
-      draw_vertical_wall_between(left, right, :room)
-    end
-
-    def draw_room_corner(x,y)
-      draw_corner(x,y, :room)
-    end
-
-    def draw_world_horizontal_wall(x,y)
-      draw_horizontal_wall(x,y, :world)
-    end
-
-    def draw_world_vertical_wall(x,y)
-      draw_vertical_wall(x,y, :world)
-    end
-
-    def draw_world_horizontal_wall_between(top, bottom)
-      draw_horizontal_wall_between(top, bottom, :world)
-    end
-
-    def draw_world_vertical_wall_between(left, right)
-      draw_vertical_wall_between(left, right, :world)
-    end
-
-    def draw_world_corner(x,y)
-      draw_corner(x,y, :world)
+    def draw_corridor(corridor)
+      corridor.positions.each do |position|
+        case corridor.direction
+        when :north, :south
+          draw_vertical_corridor(*position)
+        when :east, :west
+          draw_horizontal_corridor(*position)
+        end
+      end
     end
 
     def draw_vertical_corridor(x,y)
@@ -84,6 +91,10 @@ module Rogue
     end
 
     protected
+    def draw_floor(x,y)
+      @tiles[y][x] = Tiles[:floor]
+    end
+
     def draw_horizontal_wall_between(top, bottom, type)
       raise ArgumentError, "top and bottom not on same y co-ord" unless top.last == bottom.last
       (bottom.first - top.first).times do |x|

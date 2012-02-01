@@ -29,16 +29,8 @@ module Rogue
 
     def visit_world(world, tileset)
       top_left, top_right, bottom_left, bottom_right = *world.boundaries
-      tileset.draw_world_corner(*top_left)
-      tileset.draw_world_corner(*top_right)
-      tileset.draw_world_corner(*bottom_left)
-      tileset.draw_world_corner(*bottom_right)
 
-      tileset.draw_world_vertical_wall_between(top_left, bottom_left)
-      tileset.draw_world_vertical_wall_between(top_right, bottom_right)
-
-      tileset.draw_world_horizontal_wall_between(top_left, top_right)
-      tileset.draw_world_horizontal_wall_between(bottom_left, bottom_right)
+      tileset.draw_world(world)
 
       if world.children
         world.children.each { |subworld| visit_world(subworld, tileset) }
@@ -47,17 +39,7 @@ module Rogue
 
     def visit_rooms(world, tileset)
       if world.room
-        top_left, top_right, bottom_left, bottom_right = *world.room.boundaries
-        tileset.draw_room_corner(*top_left)
-        tileset.draw_room_corner(*top_right)
-        tileset.draw_room_corner(*bottom_left)
-        tileset.draw_room_corner(*bottom_right)
-
-        tileset.draw_room_vertical_wall_between(top_left, bottom_left)
-        tileset.draw_room_vertical_wall_between(top_right, bottom_right)
-
-        tileset.draw_room_horizontal_wall_between(top_left, top_right)
-        tileset.draw_room_horizontal_wall_between(bottom_left, bottom_right)
+        tileset.draw_room(world.room)
       elsif world.children
         world.children.each { |subworld| visit_rooms(subworld, tileset) }
       end
@@ -65,14 +47,7 @@ module Rogue
 
     def visit_corridors(world, tileset)
       if world.corridor
-        world.corridor.positions.each do |position|
-          case world.corridor.direction
-          when :north, :south
-            tileset.draw_vertical_corridor(*position)
-          when :east, :west
-            tileset.draw_horizontal_corridor(*position)
-          end
-        end
+        tileset.draw_corridor(world.corridor)
       end
       if world.children
         world.children.each { |subworld| visit_corridors(subworld, tileset) }
