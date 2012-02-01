@@ -1,4 +1,4 @@
-module Rogue  
+module Rogue
   class Renderer
     attr_reader :width, :height
 
@@ -11,6 +11,7 @@ module Rogue
       ts = TileSet.new(width, height)
       visit_world(world, ts)
       visit_rooms(world, ts)
+      visit_corridors(world, ts)
       puts ts.render!
     end
 
@@ -32,7 +33,7 @@ module Rogue
       tileset.draw_world_corner(*top_right)
       tileset.draw_world_corner(*bottom_left)
       tileset.draw_world_corner(*bottom_right)
-      
+
       tileset.draw_world_vertical_wall_between(top_left, bottom_left)
       tileset.draw_world_vertical_wall_between(top_right, bottom_right)
 
@@ -51,7 +52,7 @@ module Rogue
         tileset.draw_room_corner(*top_right)
         tileset.draw_room_corner(*bottom_left)
         tileset.draw_room_corner(*bottom_right)
-      
+
         tileset.draw_room_vertical_wall_between(top_left, bottom_left)
         tileset.draw_room_vertical_wall_between(top_right, bottom_right)
 
@@ -61,5 +62,21 @@ module Rogue
         world.children.each { |subworld| visit_rooms(subworld, tileset) }
       end
     end
+
+    def visit_corridors(world, tileset)
+      if world.corridor
+        world.corridor.positions.each do |position|
+          case world.corridor.direction
+          when :north, :south
+            tileset.draw_vertical_corridor(*position)
+          when :east, :west
+            tileset.draw_horizontal_corridor(*position)
+          end
+        end
+      end
+      if world.children
+        world.children.each { |subworld| visit_corridors(subworld, tileset) }
+      end
+    end
   end
-end  
+end

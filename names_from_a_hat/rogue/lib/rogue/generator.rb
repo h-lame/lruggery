@@ -15,6 +15,7 @@ module Rogue
         w.split!(desired_room_width + 2, desired_room_height + 2)
       end
       w.generate_rooms!(desired_room_width, desired_room_height)
+      w.generate_corridors!
       w
     end
   end

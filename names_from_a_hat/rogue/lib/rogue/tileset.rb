@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'colored'
 
 module Rogue
@@ -13,6 +14,10 @@ module Rogue
         corner: '+'.green,
         horizontal_wall: '-'.green,
         vertical_wall: '|'.green
+      },
+      corridor: {
+        horizontal: '='.blue,
+        vertical: '‖'.blue,
       }
     }
 
@@ -60,7 +65,15 @@ module Rogue
     def draw_world_corner(x,y)
       draw_corner(x,y, :world)
     end
-    
+
+    def draw_vertical_corridor(x,y)
+      @tiles[y][x] = Tiles[:corridor][:vertical]
+    end
+
+    def draw_horizontal_corridor(x,y)
+      @tiles[y][x] = Tiles[:corridor][:horizontal]
+    end
+
     def render!
       rendered = ''
       @tiles.each do |row|
@@ -69,7 +82,7 @@ module Rogue
       end
       rendered
     end
-    
+
     protected
     def draw_horizontal_wall_between(top, bottom, type)
       raise ArgumentError, "top and bottom not on same y co-ord" unless top.last == bottom.last
@@ -77,7 +90,7 @@ module Rogue
         draw_horizontal_wall(top.first + x, top.last, type)
       end
     end
-      
+
     def draw_horizontal_wall(x,y, type)
       @tiles[y][x] =
         if @tiles[y][x] == Tiles[:empty]
