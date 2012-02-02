@@ -6,9 +6,9 @@ module Rogue
       w_top, w_bottom = *wall
       p_top, p_bottom = *plane
 
-      start = [Spreader.new((w_top.first..w_bottom.first).to_a).get_weighted_random_item, w_top.last]
+      start = [w_top.first, Spreader.new((w_top.last..w_bottom.last).to_a).item(:middle)]
       # wall is on plane already
-      if w_top.last == p_top.last || w_bottom.last == p_bottom.last
+      if w_top.first == p_top.first
         new(start, 1, direction)
       else
         length = (w_top.first - p_top.first).abs
@@ -21,9 +21,9 @@ module Rogue
       w_left, w_right = *wall
       p_left, p_right = *plane
 
-      start = [w_left.first, Spreader.new((w_left.last..w_right.last).to_a).get_weighted_random_item]
+      start = [Spreader.new((w_left.first..w_right.first).to_a).item(:middle), w_left.last]
       # wall is on plane already
-      if w_left.first == p_left.first || w_right.first == p_right.first
+      if w_left.last == p_left.last
         new(start, 1, direction)
       else
         length = (w_left.last - p_left.last).abs
@@ -32,7 +32,6 @@ module Rogue
     end
 
     def initialize(start, length, direction)
-      puts "New #{direction} wall starting at (#{start.first},#{start.last}) for #{length} places"
       @start = start
       @length = length
       @direction = direction
