@@ -74,7 +74,7 @@ module Rogue
     end
 
     def split_horizontally(desired_width, desired_height)
-      pos = Spreader.new(((0+desired_height)..(height-desired_height)).to_a).get_weighted_random_item
+      pos = Spreader.new(((0+desired_height)..(height-desired_height)).to_a).item(:middle)
       @children =
         if pos
           [
@@ -87,7 +87,7 @@ module Rogue
     end
 
     def split_vertically(desired_width, desired_height)
-      pos = Spreader.new(((0+desired_width)..(width-desired_width)).to_a).get_weighted_random_item
+      pos = Spreader.new(((0+desired_width)..(width-desired_width)).to_a).item(:middle)
       @children =
         if pos
           [
