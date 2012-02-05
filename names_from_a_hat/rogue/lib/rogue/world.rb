@@ -10,6 +10,13 @@ module Rogue
       end
     end
 
+    def rooms
+      r = []
+      r << @room
+      children.each { |c| r += c.rooms } if children
+      r.flatten.compact
+    end
+
     def split!(desired_width, desired_height)
       if splittable?(desired_height, desired_height)
         if children.nil?

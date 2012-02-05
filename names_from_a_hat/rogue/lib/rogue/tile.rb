@@ -20,19 +20,29 @@ module Rogue
         horizontal: '='.blue, # ═ would be better, but it's double width
         vertical: '‖'.blue,# ║ would be better, but it's double width
         crossover: '∷'.blue # ╬ would be better, but it's double width
-      }
+      },
+      player: '@'.yellow
     }
 
     def initialize
       @content = Tiles[:empty]
+      @player_is_here = false
     end
 
     def make_floor
       @content = Tiles[:floor]
     end
 
+    def player_is_here!
+      @player_is_here = true
+    end
+
+    def player_is_not_here!
+      @player_is_here = false
+    end
+
     def to_s
-      @content
+      @player_is_here ? Tiles[:player] : @content
     end
 
     def make_horizontal_wall(type)

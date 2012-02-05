@@ -52,6 +52,11 @@ module Rogue
       end
     end
 
+    def draw_player(player)
+      @tiles.flatten.each {|t| t.player_is_not_here! }
+      @tiles[player.y][player.x].player_is_here!
+    end
+
     def render!
       rendered = ''
       @tiles.each do |row|
