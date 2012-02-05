@@ -1,31 +1,8 @@
-# encoding: utf-8
-require 'colored'
-
 module Rogue
   class TileSet
-    Tiles = {
-      empty: ' ',
-      floor: '.'.white,
-      room: {
-        corner: '+'.red,
-        horizontal_wall: '-'.red,
-        vertical_wall: '|'.red,
-      },
-      world: {
-        corner: '+'.green,
-        horizontal_wall: '-'.green,
-        vertical_wall: '|'.green
-      },
-      corridor: {
-        horizontal: '='.blue, # ═ would be better, but it's double width
-        vertical: '‖'.blue,# ║ would be better, but it's double width
-        crossover: '∷'.blue # ╬ would be better, but it's double width
-      }
-    }
-
     def initialize(width, height)
       @tiles = []
-      height.times { @tiles << ([TileSet::Tiles[:empty]] * width) }
+      height.times { @tiles << (width.times.map { Tile.new }) }
     end
 
     def draw_room(room)
@@ -86,7 +63,7 @@ module Rogue
 
     protected
     def draw_floor_at(x,y)
-      @tiles[y][x] = Tiles[:floor]
+      @tiles[y][x].make_floor
     end
 
     def draw_horizontal_wall_between(top, bottom, type)
@@ -97,14 +74,7 @@ module Rogue
     end
 
     def draw_horizontal_wall_at(x,y, type)
-      @tiles[y][x] =
-        if @tiles[y][x] == Tiles[:empty]
-          Tiles[type][:horizontal_wall]
-        elsif @tiles[y][x] == Tiles[type][:vertical_wall] || @tiles[y][x] == Tiles[type][:corner]
-          Tiles[type][:corner]
-        else
-          Tiles[type][:horizontal_wall]
-        end
+      @tiles[y][x].make_horizontal_wall(type)
     end
 
     def draw_vertical_wall_between(left, right, type)
@@ -115,38 +85,19 @@ module Rogue
     end
 
     def draw_vertical_wall_at(x,y, type)
-      @tiles[y][x] =
-        if @tiles[y][x] == Tiles[:empty]
-          Tiles[type][:vertical_wall]
-        elsif @tiles[y][x] == Tiles[type][:horizontal_wall] || @tiles[y][x] == Tiles[type][:corner]
-          Tiles[type][:corner]
-        else
-          Tiles[type][:vertical_wall]
-        end
+      @tiles[y][x].make_vertical_wall(type)
     end
 
     def draw_vertical_corridor_at(x,y)
-      @tiles[y][x] =
-        case @tiles[y][x]
-        when Tiles[:corridor][:horizontal], Tiles[:corridor][:crossover]
-          Tiles[:corridor][:crossover]
-        else
-          Tiles[:corridor][:vertical]
-        end
+      @tiles[y][x].make_vertical_corridor
     end
 
     def draw_horizontal_corridor_at(x,y)
-      @tiles[y][x] =
-        case @tiles[y][x]
-        when Tiles[:corridor][:vertical], Tiles[:corridor][:crossover]
-          Tiles[:corridor][:crossover]
-        else
-          Tiles[:corridor][:horizontal]
-        end
+      @tiles[y][x].make_horizontal_corridor
     end
 
     def draw_corner_at(x,y, type)
-      @tiles[y][x] = Tiles[type][:corner]
+      @tiles[y][x].make_corner(type)
     end
   end
 end

@@ -9,7 +9,7 @@ module Rogue
 
     def render!(world)
       ts = TileSet.new(width, height)
-      visit_world(world, ts)
+      #visit_world(world, ts)
       visit_rooms(world, ts)
       visit_corridors(world, ts)
       puts ts.render!
