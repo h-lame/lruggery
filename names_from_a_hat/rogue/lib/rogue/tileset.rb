@@ -17,8 +17,9 @@ module Rogue
         vertical_wall: '|'.green
       },
       corridor: {
-        horizontal: '█'.blue,
-        vertical: '█'.blue,
+        horizontal: '='.blue, # ═ would be better, but it's double width
+        vertical: '‖'.blue,# ║ would be better, but it's double width
+        crossover: '∷'.blue # ╬ would be better, but it's double width
       }
     }
 
@@ -63,21 +64,15 @@ module Rogue
     end
 
     def draw_corridor(corridor)
-      corridor.positions.each do |position|
-        draw_corridor_at(*position)
+      corridor.positions.each do |position_and_direction|
+        position, direction = *position_and_direction
+        case direction
+        when :horizontal
+          draw_horizontal_corridor_at(*position)
+        when :vertical
+          draw_vertical_corridor_at(*position)
+        end
       end
-    end
-
-    def draw_corridor_at(x,y)
-      draw_vertical_corridor_at(x,y)
-    end
-
-    def draw_vertical_corridor_at(x,y)
-      @tiles[y][x] = Tiles[:corridor][:vertical]
-    end
-
-    def draw_horizontal_corridor_at(x,y)
-      @tiles[y][x] = Tiles[:corridor][:horizontal]
     end
 
     def render!
@@ -127,6 +122,26 @@ module Rogue
           Tiles[type][:corner]
         else
           Tiles[type][:vertical_wall]
+        end
+    end
+
+    def draw_vertical_corridor_at(x,y)
+      @tiles[y][x] =
+        case @tiles[y][x]
+        when Tiles[:corridor][:horizontal], Tiles[:corridor][:crossover]
+          Tiles[:corridor][:crossover]
+        else
+          Tiles[:corridor][:vertical]
+        end
+    end
+
+    def draw_horizontal_corridor_at(x,y)
+      @tiles[y][x] =
+        case @tiles[y][x]
+        when Tiles[:corridor][:vertical], Tiles[:corridor][:crossover]
+          Tiles[:corridor][:crossover]
+        else
+          Tiles[:corridor][:horizontal]
         end
     end
 

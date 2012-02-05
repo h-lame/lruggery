@@ -65,9 +65,9 @@ module Rogue
     def generate_straight(s, f, d)
       case d
       when :horizontal
-        (s.first..f.first).map { |x| [x, s.last] }
+        (s.first..f.first).map { |x| [[x, s.last], :horizontal] }
       when :vertical
-        (s.last..f.last).map { |y| [s.first, y] }
+        (s.last..f.last).map { |y| [[s.first, y], :vertical] }
       end
     end
 
@@ -89,23 +89,23 @@ module Rogue
     end
 
     def slice_horizontally
-      positions.map {|pos| pos.first}.uniq
+      positions.map {|p| p.first}.map {|pos| pos.first}.uniq
     end
 
     def slice_vertically
-      positions.map {|pos| pos.last}.uniq
+      positions.map {|p| p.first}.map {|pos| pos.last}.uniq
     end
 
     def furthest(direction, position)
       case direction
       when :east
-        positions.select { |p| p.last == position }.max_by { |p| p.first }
+        positions.map {|p| p.first}.select { |p| p.last == position }.max_by { |p| p.first }
       when :west
-        positions.select { |p| p.last == position }.min_by { |p| p.first }
+        positions.map {|p| p.first}.select { |p| p.last == position }.min_by { |p| p.first }
       when :north
-        positions.select { |p| p.first == position }.min_by { |p| p.last }
+        positions.map {|p| p.first}.select { |p| p.first == position }.min_by { |p| p.last }
       when :south
-        positions.select { |p| p.first == position }.max_by { |p| p.last }
+        positions.map {|p| p.first}.select { |p| p.first == position }.max_by { |p| p.last }
       end
     end
   end
