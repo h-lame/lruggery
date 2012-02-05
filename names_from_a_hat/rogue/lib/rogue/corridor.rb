@@ -1,54 +1,111 @@
 module Rogue
   class Corridor
-    attr_accessor :start, :length, :direction
-    def self.horizontal(wall, plane, direction)
-      raise ArgumentError, "can't go horizontally #{direction}" unless [:east, :west].include?(direction)
-      w_top, w_bottom = *wall
-      p_top, p_bottom = *plane
-
-      start = [w_top.first, Spreader.new((w_top.last..w_bottom.last).to_a).item(:middle)]
-      # wall is on plane already
-      if w_top.first == p_top.first
-        new(start, 1, direction)
-      else
-        length = (w_top.first - p_top.first).abs
-        new(start, length + 1, direction)
+    def self.horizontal(left, right)
+      left_slice = left.slice_vertically
+      right_slice = right.slice_vertically
+      facing = left_slice & right_slice
+      if facing.any?
+        joiner = Spreader.new(facing).item(:middle)
+        new(left.furthest(:east, joiner),
+            right.furthest(:west, joiner),
+            :horizontal)
+      elsif left_slice.any? && right_slice.any?
+        east_point = Spreader.new(left_slice).item(:random)
+        west_point = Spreader.new(right_slice).item(:random)
+        new(left.furthest(:east, east_point),
+            right.furthest(:west, west_point),
+            :horizontal)
       end
     end
 
-    def self.vertical(wall, plane, direction)
-      raise ArgumentError, "can't go vertically #{direction}" unless [:north, :south].include?(direction)
-      w_left, w_right = *wall
-      p_left, p_right = *plane
-
-      start = [Spreader.new((w_left.first..w_right.first).to_a).item(:middle), w_left.last]
-      # wall is on plane already
-      if w_left.last == p_left.last
-        new(start, 1, direction)
-      else
-        length = (w_left.last - p_left.last).abs
-        new(start, length + 1, direction)
+    def self.vertical(top, bottom)
+      top_slice = top.slice_horizontally
+      bottom_slice = bottom.slice_horizontally
+      facing = top_slice & bottom_slice
+      if facing.any?
+        joiner = Spreader.new(facing).item(:middle)
+        new(top.furthest(:south, joiner),
+            bottom.furthest(:north, joiner),
+            :vertical)
+      elsif top_slice.any? && bottom_slice.any?
+        north_point = Spreader.new(bottom_slice).item(:random)
+        south_point = Spreader.new(top_slice).item(:random)
+        new(top.furthest(:south, south_point),
+            bottom.furthest(:north, north_point),
+            :vertical)
       end
     end
 
-    def initialize(start, length, direction)
+    attr_accessor :positions, :start, :finish, :direction
+
+    def initialize(start, finish, direction)
       @start = start
-      @length = length
+      @finish = finish
       @direction = direction
+      @positions = generate_positions!
     end
 
-    def positions
-      length.times.map do |i|
-        case direction
-        when :north
-          [@start.first, @start.last - i]
-        when :east
-          [@start.first + i, @start.last]
-        when :south
-          [@start.first, @start.last + i]
-        when :west
-          [@start.first - i, @start.last]
+    def generate_positions!
+      case direction
+      when :horizontal
+        if start.last == finish.last
+          generate_straight(start, finish, :horizontal)
+        else
+          generate_zed(start, finish, :horizontal)
         end
+      when :vertical
+        if start.first == finish.first
+          generate_straight(start, finish, :vertical)
+        else
+          generate_zed(start, finish, :vertical)
+        end
+      end
+    end
+
+    def generate_straight(s, f, d)
+      case d
+      when :horizontal
+        (s.first..f.first).map { |x| [x, s.last] }
+      when :vertical
+        (s.last..f.last).map { |y| [s.first, y] }
+      end
+    end
+
+    def generate_zed(s, f, d)
+      left, right = [s, f].sort_by { |p| p.first }
+      top, bottom = [s, f].sort_by { |p| p.last }
+      case d
+      when :horizontal
+        jink = Spreader.new((left.first..right.first).to_a).item(:middle)
+        generate_straight(s, [jink, s.last], :horizontal) +
+        generate_straight([jink, f.last], f, :horizontal) +
+        generate_straight([jink, top.last], [jink, bottom.last], :vertical)
+      when :vertical
+        jink = Spreader.new((top.last..bottom.last).to_a).item(:middle)
+        generate_straight(s, [s.first, jink], :vertical) +
+        generate_straight([f.first, jink], f, :vertical) +
+        generate_straight([left.first, jink], [right.first, jink], :horizontal)
+      end
+    end
+
+    def slice_horizontally
+      positions.map {|pos| pos.first}.uniq
+    end
+
+    def slice_vertically
+      positions.map {|pos| pos.last}.uniq
+    end
+
+    def furthest(direction, position)
+      case direction
+      when :east
+        positions.select { |p| p.last == position }.max_by { |p| p.first }
+      when :west
+        positions.select { |p| p.last == position }.min_by { |p| p.first }
+      when :north
+        positions.select { |p| p.first == position }.min_by { |p| p.last }
+      when :south
+        positions.select { |p| p.first == position }.max_by { |p| p.last }
       end
     end
   end

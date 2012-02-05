@@ -1,6 +1,7 @@
 module Rogue
   class World < Space
-    attr_reader :children, :room, :corridor
+    attr_reader :children, :room
+    attr_accessor :corridor
     def world_count
       if children.nil?
         1
@@ -24,20 +25,73 @@ module Rogue
       unless children.nil?
         children.map { |c| c.generate_corridors! }
         # Only gonna do the right thing if we have 2 children.
-        children.permutation(2).each { |a, b| a.connect_to!(b) }
+        children.first.connect_to!(children.last)
       end
     end
 
     def connect_to!(other_world)
-      unless room.nil?
-        adjoining_boundary = adjoining_boundary(other_world)
+      adjoining_boundary = adjoining_boundary(other_world)
 
+      @corridor =
         case adjoining_boundary
-        when :west, :east
-          @corridor = Corridor.horizontal(room.wall(adjoining_boundary), wall(adjoining_boundary), adjoining_boundary)
-        when :north, :south
-          @corridor = Corridor.vertical(room.wall(adjoining_boundary), wall(adjoining_boundary), adjoining_boundary)
+        when :west
+          Corridor.horizontal(other_world, self)
+        when :east
+          Corridor.horizontal(self, other_world)
+        when :north
+          Corridor.vertical(other_world, self)
+        when :south
+          Corridor.vertical(self, other_world)
         end
+      other_world.corridor = @corridor
+    end
+
+    def slice_horizontally
+      slice = []
+      if room
+        slice += room.slice_horizontally
+      end
+      if corridor
+        slice += corridor.slice_horizontally
+      end
+      if children
+        children.each {|c| slice += c.slice_horizontally }
+      end
+      slice.uniq
+    end
+
+    def slice_vertically
+      slice = []
+      if room
+        slice += room.slice_vertically
+      end
+      if corridor
+        slice += corridor.slice_vertically
+      end
+      if children
+        children.each {|c| slice += c.slice_vertically }
+      end
+      slice.uniq
+    end
+
+    def furthest(direction, position)
+      furthests = []
+      furthests << room.furthest(direction, position) if room
+      if children
+        children.each { |c| furthests << c.furthest(direction, position) }
+      end
+      furthests << corridor.furthest(direction, position) if corridor
+      furthests.compact!
+
+      case direction
+      when :east
+        furthests.max_by { |f| f.first }
+      when :south
+        furthests.max_by { |f| f.last }
+      when :west
+        furthests.min_by { |f| f.first }
+      when :north
+        furthests.min_by { |f| f.last }
       end
     end
 
@@ -107,7 +161,7 @@ module Rogue
     end
 
     def to_s(with_children = true)
-      "<World: #{width}x#{height} at (#{x},#{y})#{with_children ? ((children || []).any? ? " containing:\n  #{@children.map{|c| c.to_s }.join(',')}": '') : ''}>"
+      "<World: #{width}x#{height} at (#{x},#{y}) #{room.nil? ? '' : room.to_s}#{with_children ? ((children || []).any? ? " containing:\n  #{@children.map{|c| c.to_s }.join(',')}": '') : ''}>"
     end
   end
 end

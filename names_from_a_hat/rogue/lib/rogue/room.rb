@@ -18,5 +18,27 @@ module Rogue
         nil
       end
     end
+    
+    def slice_horizontally
+      wall_positions(:north).map {|pos| pos.first}.uniq
+    end
+
+    def slice_vertically
+      wall_positions(:west).map {|pos| pos.last}.uniq
+    end
+
+    def furthest(direction, position)
+      w = wall_positions(direction)
+      case direction
+      when :east, :west
+        w.detect { |p| p.last == position }
+      when :north, :south
+        w.detect { |p| p.first == position }
+      end
+    end
+
+    def to_s
+      "<Room: #{width}x#{height} at (#{x},#{y})>"
+    end
   end
 end

@@ -31,5 +31,15 @@ module Rogue
         [bottom_left, bottom_right]
       end
     end
+
+    def wall_positions(direction)
+      w = wall(direction)
+      case direction
+      when :east, :west
+        (w.first.last..w.last.last).map {|y| [w.first.first, y]}
+      when :north, :south
+        (w.first.first..w.last.first).map {|x| [x, w.first.last]}
+      end
+    end
   end
 end
