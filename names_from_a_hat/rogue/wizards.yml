@@ -1,0 +1,28 @@
+---
+jcoglan:
+  name: James Coglan
+  talk: A History of Websockets
+codescrum:
+  name: Jairo Diaz
+  talk: “Tech interns” - How to get more qualified interns into Ruby.
+stueccles:
+  name: Stuart Eccles
+  talk: Conan the deployer - capistrano extensions focussing on AWS
+rlivsey:
+  name: Richard Livsey
+  talk: Something on MonogoDB or something on removing authentication from your models (separation of concerns)
+hmarr:
+  name: Harry Marr
+  talk: Custom documentation generators (example)
+andrewmcdonough:
+  name: Andrew McDonough
+  talk: Ruby Poetry
+chrismdp:
+  name: Chris Parsons
+  talk: The crowd-sourced talk. One slot at these evenings is given over to someone prepared to do a talk on something that the mailing list suggests, Chris is bravely wearing that mantle this time.
+knaveofdiamonds:
+  name: Roland Swingler
+  talk: Reading tea leaves - predict the future with ruby!
+botanicus:
+  name: Jakub Šťastný
+  talk: SockJS - a websocket emulation library
