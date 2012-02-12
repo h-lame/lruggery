@@ -32,16 +32,21 @@ module Rogue
 
     def run!
       initialize_el_rogue!
-      while true
-        tick!
+      while tick!
       end
+      
     end
 
     def tick!
       @renderer.render! @world, @el_rogue
       print "Where to? [wasd]: "
       dir = direction_from_keypress(get_character)
-      @world.move(@el_rogue, dir) unless dir.nil?
+      if dir == :quit
+        return false
+      else
+        @world.move(@el_rogue, dir) unless dir.nil?
+        return true
+      end
     end
 
     protected
@@ -56,6 +61,8 @@ module Rogue
         :south
       when 'a'
         :west
+      when 'q'
+        :quit
       end
     end
 
