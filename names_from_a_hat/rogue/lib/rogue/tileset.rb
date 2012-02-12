@@ -54,7 +54,7 @@ module Rogue
 
     def draw_player(player)
       # Probably a better way of doing this?
-      # coule we layer the player above the tiles?
+      # could we layer the player above the tiles?
       @tiles.flatten.each {|t| t.player_is_not_here! }
       @tiles[player.y][player.x].player_is_here!
     end
