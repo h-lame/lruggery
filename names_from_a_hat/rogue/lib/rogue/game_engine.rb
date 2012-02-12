@@ -40,11 +40,25 @@ module Rogue
     def tick!
       @renderer.render! @world, @player
       print "Where to? [wasd]: "
-      @player.move(get_character.chr.downcase)
-      puts
+      dir = direction_from_keypress(get_character)
+      @world.move(@player, dir) unless dir.nil?
     end
 
     protected
+    def direction_from_keypress(keypress)
+      key = keypress.chr.downcase
+      case key
+      when 'w'
+        :north
+      when 'd'
+        :east
+      when 's'
+        :south
+      when 'a'
+        :west
+      end
+    end
+
     def make_world
       generator.generate!(options[:max_worlds])
     end

@@ -17,6 +17,25 @@ module Rogue
       r.flatten.compact
     end
 
+    def move(thing, direction)
+      current = thing.x, thing.y
+      future = Space.move(*current, direction)
+      currently = container(*current)
+      if currently.any? { |c| c.is_in?(*future) }
+        thing.move_to(*future)
+      end
+    end
+
+    def container(x,y)
+      out = []
+      if is_in?(x,y)
+        out << @room if @room && @room.is_in?(x,y)
+        out << @corridor if @corridor && @corridor.is_in?(x,y)
+        children.each { |c| out += c.container(x,y) } if children
+      end
+      out
+    end
+
     def split!(desired_width, desired_height)
       if splittable?(desired_height, desired_height)
         if children.nil?

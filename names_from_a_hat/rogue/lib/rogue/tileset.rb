@@ -53,12 +53,15 @@ module Rogue
     end
 
     def draw_player(player)
+      # Probably a better way of doing this?
+      # coule we layer the player above the tiles?
       @tiles.flatten.each {|t| t.player_is_not_here! }
       @tiles[player.y][player.x].player_is_here!
     end
 
     def render!
-      rendered = ''
+      # clear screen first
+      rendered = "\e[2J\e[f"
       @tiles.each do |row|
         rendered << row.join
         rendered << "\n"

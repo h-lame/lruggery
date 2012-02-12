@@ -108,5 +108,9 @@ module Rogue
         positions.map {|p| p.first}.select { |p| p.first == position }.max_by { |p| p.last }
       end
     end
+
+    def is_in?(x,y)
+      positions.map {|p| p.first}.include? [x,y]
+    end
   end
 end
