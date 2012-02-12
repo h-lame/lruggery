@@ -7,24 +7,12 @@ module Rogue
       @height = height
     end
 
-    def render!(world, player = nil)
+    def render!(world, el_rogue = nil)
       ts = TileSet.new(width, height)
       #visit_world(world, ts)
       visit_rooms(world, ts)
       visit_corridors(world, ts)
-      ts.draw_player(player) if player
-      puts ts.render!
-    end
-
-    def render_world!(world)
-      ts = TileSet.new(width, height)
-      visit_world(world, ts)
-      puts ts.render!
-    end
-
-    def render_rooms!(world)
-      ts = TileSet.new(width, height)
-      visit_rooms(world, ts)
+      ts.draw_player(el_rogue) if el_rogue
       puts ts.render!
     end
 

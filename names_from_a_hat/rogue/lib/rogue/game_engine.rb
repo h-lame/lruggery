@@ -31,17 +31,17 @@ module Rogue
     end
 
     def run!
-      initialize_player!
+      initialize_el_rogue!
       while true
         tick!
       end
     end
 
     def tick!
-      @renderer.render! @world, @player
+      @renderer.render! @world, @el_rogue
       print "Where to? [wasd]: "
       dir = direction_from_keypress(get_character)
-      @world.move(@player, dir) unless dir.nil?
+      @world.move(@el_rogue, dir) unless dir.nil?
     end
 
     protected
@@ -63,8 +63,8 @@ module Rogue
       generator.generate!(options[:max_worlds])
     end
 
-    def initialize_player!
-      @player = Player.new(@world.rooms.sample)
+    def initialize_el_rogue!
+      @el_rogue = ElRouge.new(@world.rooms.sample)
     end
   end
 end

@@ -1,5 +1,5 @@
 module Rogue
-  class Player
+  class ElRouge
     attr_reader :x, :y
 
     def initialize(room)
