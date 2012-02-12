@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'yaml'
 
 module Rogue
   class GameEngine
@@ -31,15 +32,18 @@ module Rogue
     end
 
     def run!
-      initialize_el_rogue!
+      rooms = @world.rooms.dup
+      el_rogue_room = rooms.sample
+      rooms.delete(el_rogue_room)
+      initialize_el_rogue!(el_rogue_room)
+      initialize_wizards!(rooms)
       while tick!
       end
-      
     end
 
     def tick!
-      @renderer.render! @world, @el_rogue
-      print "Where to? [wasd]: "
+      @renderer.render! @world, @el_rogue, *@wizards
+      print "Where to? [wasd/q]: "
       dir = direction_from_keypress(get_character)
       if dir == :quit
         return false
@@ -70,8 +74,17 @@ module Rogue
       generator.generate!(options[:max_worlds])
     end
 
-    def initialize_el_rogue!
-      @el_rogue = ElRouge.new(@world.rooms.sample)
+    def initialize_el_rogue!(in_room)
+      @el_rogue = ElRogue.new(in_room)
+    end
+
+    def initialize_wizards!(in_rooms)
+      wizards = File.open(options[:wizards_file]) { |f| YAML::load(f) }
+      @wizards = wizards.map do |handle, details|
+        w_room = in_rooms.sample
+        in_rooms.delete(w_room)
+        Wizard.new(w_room, handle, details)
+      end
     end
   end
 end

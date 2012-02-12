@@ -52,11 +52,24 @@ module Rogue
       end
     end
 
-    def draw_player(player)
+    def draw_creature(creature)
+      case creature
+      when Wizard
+        draw_wizard(creature)
+      when ElRogue
+        draw_el_rogue(creature)
+      end
+    end
+
+    def draw_wizard(wizard)
+      @tiles[wizard.y][wizard.x].a_wizard_is_here!
+    end
+
+    def draw_el_rogue(el_rogue)
       # Probably a better way of doing this?
-      # could we layer the player above the tiles?
-      @tiles.flatten.each {|t| t.player_is_not_here! }
-      @tiles[player.y][player.x].player_is_here!
+      # could we layer the el_rogue above the tiles?
+      @tiles.flatten.each {|t| t.el_rogue_is_not_here! }
+      @tiles[el_rogue.y][el_rogue.x].el_rogue_is_here!
     end
 
     def render!
