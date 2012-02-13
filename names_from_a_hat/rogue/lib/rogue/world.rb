@@ -40,7 +40,7 @@ module Rogue
       if splittable?(desired_height, desired_height)
         if children.nil?
           direction = possible_directions(desired_width, desired_height).sample
-          send(:"split_#{direction}ly", desired_width, desired_height) if direction
+          send(:"split_#{direction}ly", desired_width, desired_height) if direction && (rand > 0.4)
         else
           children.map { |c| c.split!(desired_width, desired_height) }.compact.any?
         end
