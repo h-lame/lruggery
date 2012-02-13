@@ -39,6 +39,7 @@ module Rogue
       initialize_wizards!(rooms)
       while tick!
       end
+      display_history!
     end
 
     def tick!
@@ -93,6 +94,22 @@ module Rogue
 
     def display_event(wizard)
       Event.new(wizard, options[:width], options[:height]).render!
+    end
+
+    def display_history!
+      wizard_font = Banner.font('stop')
+      wizard_texts =
+        if @defeated.any?
+          @defeated.map.with_index { |w,i| [Banner.draw_text("#{i+1}. #{w.name}", wizard_font, false), :green] }
+        else
+          [[Banner.draw_text("NONE! You idiot!", wizard_font), :red]]
+        end
+      puts Banner.render! options[:width], options[:height],
+                          "You met the following wizards:",
+                          "",
+                          *wizard_texts.map {|wt| [wt, ""] }.flatten(1),
+                          "",
+                          "Hurrah!"
     end
 
     def make_world

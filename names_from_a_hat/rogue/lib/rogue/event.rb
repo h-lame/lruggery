@@ -24,7 +24,5 @@ module Rogue
                           *talk_texts.map {|t| [t, :red]}
 
     end
-
-    protected
   end
 end
