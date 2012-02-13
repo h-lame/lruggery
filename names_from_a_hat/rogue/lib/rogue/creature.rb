@@ -13,5 +13,9 @@ module Rogue
       @x = x
       @y = y
     end
+
+    def on_top_of?(creature)
+      (creature.x == @x) && (creature.y == @y)
+    end
   end
 end

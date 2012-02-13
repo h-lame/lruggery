@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    artii (1.0.3)
     colored (1.2)
     highline (1.6.11)
     trollop (1.16.2)
@@ -9,6 +10,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  artii
   colored
   highline
   trollop

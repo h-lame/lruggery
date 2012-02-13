@@ -20,7 +20,7 @@ module Rogue
     end
 
     def choose_world!
-      chosen = false
+      chosen = 'n'
       until chosen == 'y'
         w = make_world
         renderer.render!(w)
@@ -42,6 +42,7 @@ module Rogue
     end
 
     def tick!
+      check_for_events!
       @renderer.render! @world, @el_rogue, *@wizards
       print "Where to? [wasd/q]: "
       dir = direction_from_keypress(get_character)
@@ -50,6 +51,14 @@ module Rogue
       else
         @world.move(@el_rogue, dir) unless dir.nil?
         return true
+      end
+    end
+
+    def display_all_wizards!
+      tmp_space = Space.new(3,3,0,0)
+      wizards = File.open(options[:wizards_file]) { |f| YAML::load(f) }
+      wizards.map do |handle, details|
+        display_event(Wizard.new(tmp_space, handle, details))
       end
     end
 
@@ -70,6 +79,22 @@ module Rogue
       end
     end
 
+    def check_for_events!
+      found = @wizards.detect {|w| @el_rogue.on_top_of?(w) }
+      if found
+        @wizards.delete(found)
+        @defeated << found
+        display_event(found)
+        print "Continue [Y]: "
+        while get_character.chr.downcase != 'y' do
+        end
+      end
+    end
+
+    def display_event(wizard)
+      Event.new(wizard, options[:width], options[:height]).render!
+    end
+
     def make_world
       generator.generate!(options[:max_worlds])
     end
@@ -85,6 +110,7 @@ module Rogue
         in_rooms.delete(w_room)
         Wizard.new(w_room, handle, details)
       end
+      @defeated = []
     end
   end
 end

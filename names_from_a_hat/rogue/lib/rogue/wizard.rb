@@ -9,11 +9,11 @@ module Rogue
     end
 
     def name
-      @details[:name]
+      @details['name']
     end
 
     def talk
-      @details[:talk]
+      @details['talk']
     end
   end
 end

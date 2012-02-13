@@ -3,3 +3,4 @@ source "http://rubygems.org"
 gem 'colored'
 gem 'trollop'
 gem 'highline'
+gem 'artii'
