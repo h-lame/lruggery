@@ -1,8 +1,12 @@
 module Rogue
   class Banner
     FONT_REPO = Artii::Base.new({})
+    class << self
+      attr_accessor :white_console
+    end
+    self.white_console = false
 
-    def self.center(width, height, rendered_text, color = :white)
+    def self.center(width, height, rendered_text, color = (self.white_console ? :black : :white))
       if rendered_text.nil? || rendered_text.lines.first.nil?
         ""
       else

@@ -13,6 +13,7 @@ opts = Trollop::options do
   opt :room_width, "Desired room width", :default => 6, :short => 'W'
   opt :room_height, "Desired room height", :default => 6, :short => 'H'
   opt :wizards_file, "Wizards file", :default => 'wizards.yml', :short => 's'
+  opt :white_console, "Use an inverted colour scheme (for white terminals)", :default => false, :short => 'i'
 end
 
 require './lib/rogue'

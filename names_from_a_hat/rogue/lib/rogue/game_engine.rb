@@ -9,6 +9,8 @@ module Rogue
 
     def initialize(args)
       @options = args
+      Banner.white_console = args[:white_console]
+      Tile.white_console = args[:white_console]
     end
 
     def renderer
