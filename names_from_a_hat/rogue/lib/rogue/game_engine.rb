@@ -88,14 +88,13 @@ module Rogue
     end
 
     def check_for_events!
-      found = @wizards.detect {|w| @el_rogue.on_top_of?(w) }
+      found = undefeated_wizards.detect {|w| @el_rogue.on_top_of?(w) }
       if found
-        @wizards.delete(found)
-        @defeated << found
         display_event(found)
         print "Continue [Y]: "
         while get_character.chr.downcase != 'y' do
         end
+        found.defeat!
       end
     end
 
@@ -106,8 +105,8 @@ module Rogue
     def display_history!
       wizard_font = Banner.font('stop')
       wizard_texts =
-        if @defeated.any?
-          @defeated.map.with_index { |w,i| [Banner.draw_text("#{i+1}. #{w.name}", wizard_font, false), :green] }
+        if defeated_wizards.any?
+          defeated_wizards.map.with_index { |w,i| [Banner.draw_text("#{i+1}. #{w.name}", wizard_font, false), :green] }
         else
           [[Banner.draw_text("NONE! You idiot!", wizard_font), :red]]
         end
@@ -134,7 +133,14 @@ module Rogue
         in_rooms.delete(w_room)
         Wizard.new(w_room, handle, details)
       end
-      @defeated = []
+    end
+
+    def defeated_wizards
+      @wizards.select { |w| w.defeated? }
+    end
+
+    def undefeated_wizards
+      @wizards.reject { |w| w.defeated? }
     end
   end
 end

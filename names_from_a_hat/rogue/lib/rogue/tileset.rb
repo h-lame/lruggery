@@ -66,7 +66,11 @@ module Rogue
     end
 
     def draw_wizard(wizard)
-      @tiles[wizard.y][wizard.x].a_wizard_is_here!
+      if wizard.defeated?
+        @tiles[wizard.y][wizard.x].a_wizard_is_not_here!
+      else
+        @tiles[wizard.y][wizard.x].a_wizard_is_here!
+      end
     end
 
     def draw_el_rogue(el_rogue)

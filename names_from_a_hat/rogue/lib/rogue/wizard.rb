@@ -6,6 +6,7 @@ module Rogue
       super(room)
       @handle = handle
       @details = details
+      @defeated = false
     end
 
     def name
@@ -14,6 +15,14 @@ module Rogue
 
     def talk
       @details['talk']
+    end
+
+    def defeated?
+      @defeated
+    end
+
+    def defeat!
+      @defeated = true
     end
   end
 end
