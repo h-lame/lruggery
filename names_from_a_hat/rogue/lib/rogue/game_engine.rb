@@ -17,6 +17,10 @@ module Rogue
       @renderer ||= Rogue::Renderer.new(options[:width], options[:height])
     end
 
+    def foggy_renderer
+      @foggy_renderer ||= Rogue::Foggy::Renderer.new(options[:width], options[:height])
+    end
+
     def generator
       @generator ||= Rogue::Generator.new(options[:width], options[:height], options[:room_width], options[:room_height])
     end
@@ -25,6 +29,7 @@ module Rogue
       chosen = 'n'
       until chosen == 'y'
         w = make_world
+        renderer.clear!
         renderer.render!(w)
         print("Use this world? [y/n]: ")
         chosen = get_character.chr.downcase
@@ -46,7 +51,7 @@ module Rogue
 
     def tick!
       check_for_events!
-      @renderer.render! @world, @el_rogue, *@wizards
+      foggy_renderer.render! @world, @el_rogue, *@wizards
       print "Where to? [wasd/q]: "
       dir = direction_from_keypress(get_character)
       if dir == :quit
@@ -119,7 +124,7 @@ module Rogue
     end
 
     def initialize_el_rogue!(in_room)
-      @el_rogue = ElRogue.new(in_room)
+      @el_rogue = ElRogue.new(in_room, options[:eye_strength])
     end
 
     def initialize_wizards!(in_rooms)

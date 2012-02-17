@@ -2,7 +2,11 @@ module Rogue
   class TileSet
     def initialize(width, height)
       @tiles = []
-      height.times { @tiles << (width.times.map { Tile.new }) }
+      height.times { @tiles << (width.times.map { tile_class.new }) }
+    end
+
+    def tile_class
+      Rogue::Tile
     end
 
     def draw_room(room)

@@ -5,15 +5,23 @@ module Rogue
     def initialize(width, height)
       @width = width
       @height = height
+      clear!
+    end
+
+    def new_tileset
+      TileSet.new(width, height)
+    end
+
+    def clear!
+      @ts = new_tileset
     end
 
     def render!(world, *creatures)
-      ts = TileSet.new(width, height)
-      #visit_world(world, ts)
-      visit_rooms(world, ts)
-      visit_corridors(world, ts)
-      creatures.each { |c| ts.draw_creature(c) }
-      puts ts.render!
+      #visit_world(world, @ts)
+      visit_rooms(world, @ts)
+      visit_corridors(world, @ts)
+      creatures.each { |c| @ts.draw_creature(c) }
+      puts @ts.render!
     end
 
     def visit_world(world, tileset)
