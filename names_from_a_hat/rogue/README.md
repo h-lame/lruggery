@@ -12,3 +12,9 @@ Features:
  * Strange abstractions
  * Probably broken randomizer (rogue/spreader)
  * Pretty dungeons
+ 
+I found the following links useful when building this monstrosity:
+
+ * [BSP Dungeon generation](http://roguebasin.roguelikedevelopment.org/index.php/Basic_BSP_Dungeon_generation)
+ * [roguebasin](http://roguebasin.roguelikedevelopment.org/)
+ * [Understanding roguelike dungeons](http://www.emanueleferonato.com/2009/06/02/understanding-roguelike-dungeons/)
