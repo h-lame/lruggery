@@ -11,18 +11,12 @@ stueccles:
 rlivsey:
   name: Richard Livsey
   talk: Breaking up is hard to do
-hmarr:
-  name: Harry Marr
-  talk: Custom documentation generators
 andrewmcdonough:
   name: Andrew McDonough
   talk: Ruby Poetry
 chrismdp:
   name: Chris Parsons
-  talk: The crowd-sourced talk.
+  talk: The Great Ruby Showdown
 knaveofdiamonds:
   name: Roland Swingler
   talk: "Reading tea leaves\npredict the future with ruby!"
-botanicus:
-  name: Jakub Stastny
-  talk: "SockJS\na websocket emulation library"
