@@ -24,4 +24,5 @@ ge = Rogue::GameEngine.new(opts)
 #ge.display_all_events!
 
 ge.choose_world!
+ge.title_screen!
 ge.run!

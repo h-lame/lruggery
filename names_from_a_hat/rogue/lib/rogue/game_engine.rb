@@ -38,6 +38,22 @@ module Rogue
       @world = w
     end
 
+    def title_screen!
+      title_font = Banner.font('larry3d')
+      subtitle_font = Banner.font('contessa')
+      puts Banner.render! options[:width], options[:height],
+                          "Welcome to",
+                          "",
+                          [Banner.draw_text("El Rogue!", title_font), :red],
+                          "",
+                          "and the",
+                          "",
+                          [Banner.draw_text('Speakers of Lightning', subtitle_font, false), :magenta]
+      print("Continue? [y]: ")
+      until get_character.chr.downcase == 'y'
+      end
+    end
+
     def run!
       rooms = @world.rooms.dup
       el_rogue_room = rooms.sample
@@ -51,14 +67,18 @@ module Rogue
 
     def tick!
       check_for_events!
-      foggy_renderer.render! @world, @el_rogue, *@wizards
-      print "Where to? [wasd/q]: "
-      dir = direction_from_keypress(get_character)
-      if dir == :quit
-        return false
+      if undefeated_wizards.any?
+        foggy_renderer.render! @world, @el_rogue, *@wizards
+        print "Where to? [wasd/q]: "
+        dir = direction_from_keypress(get_character)
+        if dir == :quit
+          return false
+        else
+          @world.move(@el_rogue, dir) unless dir.nil?
+          return true
+        end
       else
-        @world.move(@el_rogue, dir) unless dir.nil?
-        return true
+        return false
       end
     end
 
