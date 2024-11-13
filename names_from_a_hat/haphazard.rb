@@ -1,6 +1,6 @@
 Shoes.app :margin => 20, :title => 'Haphazard' do
   the_file_path = ask_open_file
-  
+
   @death_row = File.open(the_file_path) {|f| f.readlines }.map{|l| l.chomp}
   # Can't make this work, even on Intel Macs with video :(
   # @drumroll = video(File.expand_path(File.dirname(__FILE__) + '/jazz-drumroll.mp3'))
@@ -9,26 +9,26 @@ Shoes.app :margin => 20, :title => 'Haphazard' do
   # @fanfare = video(File.expand_path(File.dirname(__FILE__) + '/fanfare.mp3'))
   # @fanfare.stop()
   # @fanfare.hide()
-  
+
   @order = []
   @the_order = nil
-  
+
   def chosen
     {:stroke => cadetblue, :fill => chocolate}
   end
-  
+
   def not_chosen
     {:stroke => cornsilk, :fill => cornflowerblue}
   end
-  
+
   def been_done
     {:stroke => firebrick, :fill => teal}
   end
-  
+
   def make_name(n)
     para n, not_chosen.merge(:font => 'Comic Sans MS 36px', :margin => 50)
   end
-  
+
   def make_the_button
     button "GO GO GO RANDOM!", :width => 200, :left => 20 do
       if @death_row.empty?
@@ -61,7 +61,7 @@ Shoes.app :margin => 20, :title => 'Haphazard' do
       end
     end
   end
-  
+
   def draw_the_names
     @the_names = flow :margin => 20, :top => 140, :left => 20 do
       @the_doods = @death_row.inject({}) do |h, n|
@@ -70,22 +70,22 @@ Shoes.app :margin => 20, :title => 'Haphazard' do
       end
     end
   end
-  
+
   def show_the_winner
     @the_dood = para '', :font => 'Comic Sans MS 72px', :margin => 20, :stroke => chartreuse, :fill => indianred
   end
-  
+
   background lemonchiffon
   @randomator_says_go = nil
   #@death_row = names
-  
+
   stack do
     make_the_button
     show_the_winner
     draw_the_names
   end
-  
-  animate(24) do 
+
+  animate(24) do
     if @randomator_says_go && @death_row.size > 0
       @the_luckiest = @death_row[rand(@death_row.size)]
       @death_row.each {|n| @the_doods[n].style(not_chosen)}

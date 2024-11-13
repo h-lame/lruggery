@@ -6,7 +6,7 @@ class Manifestable
     @manifestation = nil
     @start_position = [0,0]
   end
-  
+
   # NOTE - ahh... good intentions - do I even ever use these methods?
   def show
     if @manifestation.nil?
@@ -16,14 +16,14 @@ class Manifestable
       @shown = true
     end
   end
-  
+
   def hide
     unless @manifestation.nil? or not @shown
       @manifestation.hide
       @shown = false
     end
   end
-  
+
   def manifest(x = 20, y = 20)
     if @manifestation.nil?
       @manifestation = draw_thyself(x,y)
@@ -37,7 +37,7 @@ class Manifestable
       @shown = true
     end
   end
-  
+
   def draw_thyself(x, y)
     raise "Not implemented"
   end
@@ -50,7 +50,7 @@ class Name < Manifestable
     @base_size = 120
     @cur_size = nil
   end
-  
+
   def draw_thyself(x, y, size = @base_size)
     $app.para(@handle, :font => "Futura #{size}px", :top => y, :left => x, :stroke => '#000')
   end
@@ -62,7 +62,7 @@ class Name < Manifestable
      @base_size / scale
     ]
   end
-  
+
   def move_towards_the_hat(the_hat)
     begin
       if @shown && @manifestation && !the_hat.contains?(self)
@@ -92,7 +92,7 @@ end
 
 class Hat
   MAGIC_WORDS = ['Abrakadabra', 'Sim Sala Bim', 'Hocus Pocus', 'Izzy Wizzy, let\'s get busy', 'Shazam']
-  
+
   attr_accessor :hole
   def initialize()
     @hole = [0,0]
@@ -225,7 +225,7 @@ Shoes.app :width => 640, :height => 480, :title => 'Names From A Hat' do
       end
     end
   end
-  
+
   @the_hat = Hat.new
   @the_hat.manifest(200, 200)
 
@@ -236,9 +236,9 @@ Shoes.app :width => 640, :height => 480, :title => 'Names From A Hat' do
     @pressed_go = 'yes'
     @the_start_button.remove
   end
-  
+
   animate(24) do
     main_loop
   end
-  
+
 end
