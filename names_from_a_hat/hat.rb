@@ -64,28 +64,24 @@ class Name < Manifestable
   end
 
   def move_towards_the_hat(the_hat)
-    begin
-      if @shown && @manifestation && !the_hat.contains?(self)
-        @cur_size ||= @base_size
-        step_l, step_t, step_size = move_step(the_hat)
-        new_x = @manifestation.left - step_l
-        new_y = @manifestation.top - step_t
-        new_size = @cur_size - step_size
-        if ((new_size <= 1) &&
-            (((new_y - the_hat.hole.last).abs <= 1) &&
-             ((new_x - the_hat.hole.first).abs <= 1)))
-          the_hat.put_name_into_hat(self)
-          self.hide
-          return true
-        else
-          @cur_size = new_size
-          @manifestation.style(size: @cur_size)
-          @manifestation.move(new_x, new_y)
-          return false
-        end
+    if @shown && @manifestation && !the_hat.contains?(self)
+      @cur_size ||= @base_size
+      step_l, step_t, step_size = move_step(the_hat)
+      new_x = @manifestation.left - step_l
+      new_y = @manifestation.top - step_t
+      new_size = @cur_size - step_size
+      if ((new_size <= 1) &&
+          (((new_y - the_hat.hole.last).abs <= 1) &&
+           ((new_x - the_hat.hole.first).abs <= 1)))
+        the_hat.put_name_into_hat(self)
+        self.hide
+        return true
+      else
+        @cur_size = new_size
+        @manifestation.style(size: @cur_size)
+        @manifestation.move(new_x, new_y)
+        return false
       end
-    rescue Object => e
-      alert e.message + "\n" + e.backtrace.join("\n")
     end
   end
 end
